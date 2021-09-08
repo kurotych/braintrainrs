@@ -24,25 +24,27 @@ mod test {
         true
     }
 
-    fn extend(perm: &mut Vec<u32>, n: usize) {
+    fn extend(perm: &mut Vec<u32>, n: usize, mut count_solutions: usize) -> usize {
         if perm.len() == n {
             println!("Solution for {:?}x{:?} table: {:?}", n, n, perm);
-            return;
+            return count_solutions + 1;
         }
         for i in 0..n {
             if !perm.contains(&(i as u32)) {
                 perm.push(i as u32);
                 if is_solution(perm) {
-                    extend(perm, n)
+                    count_solutions = extend(perm, n, count_solutions);
                 }
                 perm.pop();
             }
         }
+        count_solutions
     }
 
     #[test]
     fn back_tracking() {
-        extend(&mut Vec::new(), 16);
+        let count_solutions = extend(&mut Vec::new(), 8, 0);
+        assert_eq!(count_solutions, 92);
     }
 
     #[test]
